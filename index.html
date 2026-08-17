@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amber Grove Realty — Homes Worth Coming Home To</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b2620;
+  --forest:#213b30;
+  --sand:#efe8d8;
+  --sand-light:#f7f3e8;
+  --gold:#c9a15a;
+  --clay:#a9673c;
+  --line: rgba(27,38,32,0.14);
+  --shadow: 0 20px 60px rgba(27,38,32,0.12);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'Work Sans', sans-serif;
+  background:var(--sand-light);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+h1,h2,h3,.serif{ font-family:'Fraunces', serif; }
+a{ text-decoration:none; color:inherit; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+img{ max-width:100%; display:block; }
+
+/* ---------- top nav ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 22px 5vw;
+  background:rgba(247,243,232,0.0);
+  transition: background .4s ease, box-shadow .4s ease, padding .4s ease;
+}
+header.scrolled{
+  background:rgba(247,243,232,0.92);
+  backdrop-filter:blur(10px);
+  box-shadow:0 2px 24px rgba(27,38,32,0.08);
+  padding: 14px 5vw;
+}
+.logo{
+  font-size:1.35rem; font-weight:600; letter-spacing:.02em;
+  display:flex; align-items:center; gap:10px;
+}
+.logo-mark{
+  width:30px;height:30px; position:relative; flex:none;
+}
+.logo-mark svg{ width:100%; height:100%; }
+nav.tabs{
+  display:flex; gap:2px;
+  background:rgba(27,38,32,0.05);
+  border-radius:999px; padding:4px;
+}
+nav.tabs button{
+  padding:10px 20px; border-radius:999px; font-size:.88rem; font-weight:500;
+  letter-spacing:.03em; color:var(--forest); opacity:.65;
+  transition: all .35s ease; position:relative;
+}
+nav.tabs button.active{
+  opacity:1; background:var(--forest); color:var(--sand-light);
+}
+nav.tabs button:hover:not(.active){ opacity:1; }
+.nav-cta{
+  display:none;
+}
+@media(min-width:860px){
+  .nav-cta{
+    display:inline-block; padding:10px 22px; border:1px solid var(--forest);
+    border-radius:999px; font-size:.85rem; font-weight:500; letter-spacing:.03em;
+    transition:all .3s ease;
+  }
+  .nav-cta:hover{ background:var(--forest); color:var(--sand-light); }
+}
+.social-row{
+  display:flex; align-items:center; gap:14px;
+}
+.social-row a{
+  width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; color:var(--forest);
+  transition: all .3s ease;
+}
+.social-row a:hover{ background:var(--forest); color:var(--sand-light); border-color:var(--forest); transform:translateY(-2px); }
+.social-row svg{ width:16px; height:16px; fill:currentColor; }
+.header-right{ display:flex; align-items:center; gap:18px; }
+.social-row.social-mobile{ margin-top:10px; }
+.social-row.social-mobile a{ border-color:rgba(247,243,232,.35); color:var(--sand-light); }
+.social-row.social-mobile a:hover{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+@media(max-width:640px){ .social-row.social-header{ display:none; } }
+
+footer .social-row a{ border-color:rgba(247,243,232,.25); color:rgba(247,243,232,.7); }
+footer .social-row a:hover{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+
+.hamburger{
+  display:flex; flex-direction:column; gap:5px; width:26px; cursor:pointer;
+}
+.hamburger span{ height:2px; background:var(--forest); border-radius:2px; transition:.3s; }
+@media(min-width:860px){ .hamburger{ display:none; } }
+nav.tabs{ display:none; }
+@media(min-width:860px){ nav.tabs{ display:flex; } }
+
+.mobile-menu{
+  position:fixed; inset:0; background:var(--forest); z-index:999;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px;
+  transform:translateY(-100%); transition:transform .5s cubic-bezier(.6,0,.2,1);
+}
+.mobile-menu.open{ transform:translateY(0); }
+.mobile-menu button{
+  color:var(--sand-light); font-family:'Fraunces',serif; font-size:2rem; font-weight:400;
+  opacity:.75;
+}
+.mobile-menu button.active{ opacity:1; color:var(--gold); }
+
+/* ---------- page sections ---------- */
+.page{
+  display:none;
+  min-height:100vh;
+}
+.page.active{ display:block; animation: pageIn .6s ease; }
+@keyframes pageIn{
+  from{ opacity:0; transform:translateY(14px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.reveal{ opacity:0; transform:translateY(24px); transition:opacity .8s ease, transform .8s ease; }
+.reveal.in{ opacity:1; transform:translateY(0); }
+
+/* ---------- HOME / HERO ---------- */
+.hero{
+  position:relative; min-height:100vh; display:flex; align-items:flex-end;
+  padding: 140px 5vw 90px;
+  background: linear-gradient(180deg, #24392e 0%, #1b2a22 55%, #17221c 100%);
+  color: var(--sand-light);
+  overflow:hidden;
+}
+.hero-skyline{
+  position:absolute; bottom:0; left:0; right:0; height:46%;
+  opacity:.5;
+}
+.hero-skyline svg{ width:100%; height:100%; }
+.hero-skyline path{
+  stroke:var(--gold); stroke-width:1.3; fill:none;
+  stroke-dasharray: 3000; stroke-dashoffset:3000;
+  animation: draw 3.2s ease forwards .3s;
+}
+@keyframes draw{ to{ stroke-dashoffset:0; } }
+.hero-glow{
+  position:absolute; top:-10%; right:-10%; width:60%; height:60%;
+  background: radial-gradient(circle, rgba(201,161,90,0.28), transparent 70%);
+  filter: blur(10px);
+  animation: float 9s ease-in-out infinite;
+}
+@keyframes float{
+  0%,100%{ transform:translate(0,0); }
+  50%{ transform:translate(-30px,30px); }
+}
+.hero-content{ position:relative; z-index:2; max-width:760px; }
+.eyebrow{
+  display:flex; align-items:center; gap:10px; font-size:.8rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--gold); margin-bottom:22px;
+  opacity:0; animation: fadeUp .8s ease forwards .2s;
+}
+.eyebrow::before{ content:''; width:32px; height:1px; background:var(--gold); }
+.hero h1{
+  font-size: clamp(2.6rem, 6.4vw, 5rem); font-weight:500; line-height:1.04; letter-spacing:-.01em;
+  opacity:0; animation: fadeUp .9s ease forwards .35s;
+}
+.hero h1 em{ font-style:italic; color:var(--gold); font-weight:300; }
+.hero p.lead{
+  margin-top:26px; max-width:520px; font-size:1.08rem; line-height:1.7; color:rgba(247,243,232,.78);
+  opacity:0; animation: fadeUp .9s ease forwards .5s;
+}
+@keyframes fadeUp{
+  from{ opacity:0; transform:translateY(22px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.hero-actions{
+  display:flex; flex-wrap:wrap; gap:16px; margin-top:38px;
+  opacity:0; animation: fadeUp .9s ease forwards .65s;
+}
+.btn{
+  padding:15px 30px; border-radius:999px; font-size:.9rem; font-weight:500; letter-spacing:.03em;
+  transition: all .35s cubic-bezier(.6,0,.2,1); display:inline-flex; align-items:center; gap:10px;
+}
+.btn-gold{ background:var(--gold); color:var(--ink); }
+.btn-gold:hover{ background:#dcb56e; transform:translateY(-2px); box-shadow:0 12px 24px rgba(201,161,90,.3); }
+.btn-outline{ border:1px solid rgba(247,243,232,.4); color:var(--sand-light); }
+.btn-outline:hover{ border-color:var(--sand-light); background:rgba(247,243,232,.08); }
+
+.hero-stats{
+  position:absolute; bottom:40px; right:5vw; display:flex; gap:34px; z-index:2;
+}
+@media(max-width:760px){ .hero-stats{ display:none; } }
+.hero-stats .stat{ text-align:right; }
+.hero-stats .num{ font-family:'Fraunces',serif; font-size:1.7rem; color:var(--gold); }
+.hero-stats .lbl{ font-size:.72rem; letter-spacing:.08em; color:rgba(247,243,232,.6); text-transform:uppercase; }
+
+/* image mosaic */
+.mosaic-section{ padding: 110px 5vw; background:var(--sand-light); }
+.section-head{ max-width:640px; margin-bottom:60px; }
+.section-head .eyebrow{ color:var(--clay); animation:none; opacity:1; }
+.section-head .eyebrow::before{ background:var(--clay); }
+.section-head h2{ font-size:clamp(1.9rem,3.6vw,2.8rem); font-weight:500; margin-top:14px; line-height:1.15; color:var(--forest); }
+.section-head p{ margin-top:16px; color:#5a5f57; line-height:1.7; max-width:520px; }
+
+.mosaic{
+  display:grid; grid-template-columns: repeat(6,1fr); grid-auto-rows:120px; gap:16px;
+}
+.mosaic .tile{
+  position:relative; border-radius:18px; overflow:hidden; background:var(--sand);
+  box-shadow: var(--shadow);
+}
+.mosaic .tile img{ width:100%; height:100%; object-fit:cover; transition:transform .8s cubic-bezier(.2,.7,.2,1); }
+.mosaic .tile:hover img{ transform:scale(1.08); }
+.mosaic .tile::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 50%, rgba(27,38,32,.55) 100%);
+  opacity:0; transition:opacity .4s ease;
+}
+.mosaic .tile:hover::after{ opacity:1; }
+.mosaic .tile .tag{
+  position:absolute; bottom:14px; left:16px; color:var(--sand-light); font-size:.82rem;
+  letter-spacing:.03em; opacity:0; transform:translateY(8px); transition:all .4s ease .05s;
+}
+.mosaic .tile:hover .tag{ opacity:1; transform:translateY(0); }
+.mosaic .t1{ grid-column:span 3; grid-row:span 3; }
+.mosaic .t2{ grid-column:span 3; grid-row:span 2; }
+.mosaic .t3{ grid-column:span 2; grid-row:span 2; }
+.mosaic .t4{ grid-column:span 2; grid-row:span 2; }
+.mosaic .t5{ grid-column:span 2; grid-row:span 2; }
+@media(max-width:760px){
+  .mosaic{ grid-template-columns:repeat(2,1fr); grid-auto-rows:150px; }
+  .mosaic .t1,.mosaic .t2,.mosaic .t3,.mosaic .t4,.mosaic .t5{ grid-column:span 1; grid-row:span 2; }
+}
+
+.why-section{ padding: 20px 5vw 110px; background:var(--sand-light); }
+.why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:50px; }
+@media(max-width:960px){ .why-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:520px){ .why-grid{ grid-template-columns:1fr; } }
+.why-card{
+  background:var(--sand); border-radius:20px; padding:34px 28px; border:1px solid var(--line);
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease, background .45s ease;
+  position:relative; overflow:hidden;
+}
+.why-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow); background:var(--forest); }
+.why-card .ic-wrap{
+  width:52px; height:52px; border-radius:14px; background:rgba(201,161,90,.16);
+  display:flex; align-items:center; justify-content:center; margin-bottom:22px;
+  transition: background .45s ease;
+}
+.why-card:hover .ic-wrap{ background:rgba(201,161,90,.28); }
+.why-card svg{ width:24px; height:24px; stroke:var(--gold); }
+.why-card h3{ font-size:1.1rem; color:var(--forest); font-weight:600; transition:color .45s ease; }
+.why-card:hover h3{ color:var(--sand-light); }
+.why-card p{ margin-top:10px; font-size:.9rem; line-height:1.65; color:#5a5f57; transition:color .45s ease; }
+.why-card:hover p{ color:rgba(247,243,232,.75); }
+
+.marquee-wrap{ background:var(--forest); padding:26px 0; overflow:hidden; }
+.marquee{ display:flex; gap:60px; white-space:nowrap; animation: scroll 22s linear infinite; }
+.marquee span{ font-family:'Fraunces',serif; font-style:italic; font-size:1.3rem; color:rgba(247,243,232,.55); }
+.marquee span b{ color:var(--gold); font-style:normal; font-weight:500; }
+@keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ---------- ABOUT ---------- */
+.about-hero{ padding:150px 5vw 70px; background:var(--sand-light); }
+.about-grid{
+  display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center;
+  padding: 0 5vw 100px;
+}
+@media(max-width:860px){ .about-grid{ grid-template-columns:1fr; gap:40px; } }
+.about-grid img{ border-radius:22px; box-shadow:var(--shadow); }
+.about-copy p{ color:#4c5148; line-height:1.85; margin-top:18px; font-size:1.02rem; }
+.about-copy h2{ font-size:clamp(1.8rem,3vw,2.5rem); color:var(--forest); font-weight:500; }
+
+.values{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; padding:0 5vw 110px; }
+@media(max-width:760px){ .values{ grid-template-columns:1fr; } }
+.value-card{
+  background:var(--sand); border-radius:20px; padding:36px 30px; border:1px solid var(--line);
+  transition: transform .4s ease, box-shadow .4s ease;
+}
+.value-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow); }
+.value-card .num{ font-family:'Fraunces',serif; font-size:1rem; color:var(--gold); letter-spacing:.05em; }
+.value-card h3{ font-size:1.25rem; margin-top:14px; color:var(--forest); font-weight:600; }
+.value-card p{ margin-top:10px; color:#5a5f57; line-height:1.7; font-size:.95rem; }
+
+.team-strip{ padding:0 5vw 120px; }
+.team-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:40px; }
+@media(max-width:860px){ .team-grid{ grid-template-columns:repeat(2,1fr); } }
+.team-card{ text-align:left; }
+.team-card .ph{ border-radius:16px; overflow:hidden; aspect-ratio:3/4; background:var(--sand); }
+.team-card .ph img{ width:100%; height:100%; object-fit:cover; transition:transform .6s ease; }
+.team-card:hover .ph img{ transform:scale(1.06); }
+.team-card h4{ margin-top:14px; font-family:'Fraunces',serif; font-size:1.1rem; color:var(--forest); }
+.team-card span{ font-size:.82rem; color:var(--clay); }
+
+/* ---------- PROPERTIES ---------- */
+.props-hero{ padding:150px 5vw 50px; background:var(--sand-light); }
+.filter-row{
+  display:flex; gap:10px; flex-wrap:wrap; margin-top:34px;
+}
+.filter-row button{
+  padding:10px 20px; border-radius:999px; border:1px solid var(--line); font-size:.85rem;
+  color:var(--forest); transition:all .3s ease;
+}
+.filter-row button.active, .filter-row button:hover{ background:var(--forest); color:var(--sand-light); border-color:var(--forest); }
+
+.prop-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:30px; padding:40px 5vw 120px;
+}
+@media(max-width:1000px){ .prop-grid{ grid-template-columns:repeat(2,1fr); } }
+@media(max-width:640px){ .prop-grid{ grid-template-columns:1fr; } }
+.prop-card{
+  background:var(--sand); border-radius:20px; overflow:hidden; border:1px solid var(--line);
+  transition: transform .45s cubic-bezier(.2,.7,.2,1), box-shadow .45s ease;
+}
+.prop-card:hover{ transform:translateY(-8px); box-shadow:var(--shadow); }
+.prop-media{ position:relative; aspect-ratio:4/3; overflow:hidden; perspective:1200px; cursor:pointer; }
+.flip-inner{
+  position:relative; width:100%; height:100%; transform-style:preserve-3d;
+  transition: transform .7s cubic-bezier(.6,0,.2,1);
+}
+.flip-inner.flipped{ transform: rotateY(180deg); }
+.flip-face{
+  position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.flip-face img{ width:100%; height:100%; object-fit:cover; transition:transform .7s ease; }
+.prop-card:hover .flip-face.front img{ transform:scale(1.06); }
+.flip-face.back{ transform: rotateY(180deg); }
+.gallery-dots{
+  position:absolute; bottom:14px; left:14px; display:flex; gap:6px; z-index:3;
+}
+.gallery-dots span{ width:6px; height:6px; border-radius:50%; background:rgba(247,243,232,.5); transition:all .3s ease; }
+.gallery-dots span.active{ background:var(--gold); width:16px; border-radius:4px; }
+.gallery-hint{
+  position:absolute; top:14px; right:14px; z-index:3; background:rgba(27,38,32,.7); color:var(--sand-light);
+  font-size:.68rem; padding:5px 10px; border-radius:999px; letter-spacing:.03em; opacity:0; transition:opacity .3s ease;
+}
+.prop-card:hover .gallery-hint{ opacity:1; }
+.prop-badge{
+  position:absolute; top:14px; left:14px; background:var(--gold); color:var(--ink);
+  font-size:.72rem; padding:6px 12px; border-radius:999px; font-weight:600; letter-spacing:.02em;
+}
+.prop-price{
+  position:absolute; bottom:14px; right:14px; background:rgba(27,38,32,.85); color:var(--sand-light);
+  padding:8px 14px; border-radius:12px; font-family:'Fraunces',serif; font-size:1rem;
+}
+.prop-body{ padding:22px; }
+.prop-body h3{ font-family:'Fraunces',serif; font-size:1.2rem; color:var(--forest); font-weight:500; }
+.prop-body .loc{ font-size:.85rem; color:#7a8078; margin-top:4px; }
+.prop-meta{ display:flex; gap:16px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line); font-size:.82rem; color:#5a5f57; }
+.prop-meta span{ display:flex; align-items:center; gap:6px; }
+
+/* ---------- REVIEWS + CONTACT ---------- */
+.rev-hero{ padding:150px 5vw 60px; background:var(--sand-light); }
+.rev-track-wrap{ overflow:hidden; padding: 20px 0 100px; }
+.rev-track{ display:flex; gap:26px; width:max-content; animation: revScroll 38s linear infinite; }
+.rev-track:hover{ animation-play-state:paused; }
+@keyframes revScroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+.rev-card{
+  flex:0 0 340px; background:var(--sand); border-radius:20px; padding:32px; border:1px solid var(--line);
+}
+.stars{ color:var(--gold); font-size:1rem; letter-spacing:2px; }
+.rev-card p{ margin-top:16px; color:#4c5148; line-height:1.75; font-size:.98rem; }
+.rev-who{ display:flex; align-items:center; gap:12px; margin-top:22px; }
+.rev-who .av{ width:42px; height:42px; border-radius:50%; overflow:hidden; background:var(--forest); flex:none; }
+.rev-who .av img{ width:100%; height:100%; object-fit:cover; }
+.rev-who b{ font-size:.92rem; color:var(--forest); display:block; }
+.rev-who span{ font-size:.78rem; color:#7a8078; }
+
+.contact-section{ background:var(--forest); padding:100px 5vw; color:var(--sand-light); }
+.contact-grid{ display:grid; grid-template-columns:1fr 1.1fr; gap:70px; }
+@media(max-width:900px){ .contact-grid{ grid-template-columns:1fr; gap:46px; } }
+.contact-info h2{ font-size:clamp(1.9rem,3.4vw,2.6rem); font-weight:500; }
+.contact-info p{ margin-top:16px; color:rgba(247,243,232,.72); line-height:1.75; max-width:420px; }
+.contact-detail{ margin-top:36px; display:flex; flex-direction:column; gap:18px; }
+.contact-detail div{ display:flex; gap:14px; align-items:center; font-size:.95rem; }
+.contact-detail .ic{
+  width:38px; height:38px; border-radius:50%; border:1px solid rgba(247,243,232,.3);
+  display:flex; align-items:center; justify-content:center; flex:none;
+}
+
+form.contact-form{
+  background:var(--sand-light); border-radius:22px; padding:38px; color:var(--ink);
+  box-shadow: 0 30px 70px rgba(0,0,0,.25);
+}
+.form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+.field{ margin-bottom:18px; position:relative; }
+.field label{
+  position:absolute; left:16px; top:16px; font-size:.92rem; color:#8a8f82;
+  transition:all .25s ease; pointer-events:none; background:var(--sand-light); padding:0 4px;
+}
+.field input, .field textarea, .field select{
+  width:100%; padding:16px; border-radius:12px; border:1px solid var(--line); background:transparent;
+  font-family:inherit; font-size:.95rem; color:var(--ink); transition:border-color .3s ease;
+}
+.field textarea{ min-height:110px; resize:vertical; }
+.field input:focus, .field textarea:focus, .field select:focus{ outline:none; border-color:var(--gold); }
+.field input:focus + label, .field input:not(:placeholder-shown) + label,
+.field textarea:focus + label, .field textarea:not(:placeholder-shown) + label{
+  top:-9px; font-size:.72rem; color:var(--clay);
+}
+.submit-btn{
+  width:100%; padding:16px; border-radius:12px; background:var(--forest); color:var(--sand-light);
+  font-weight:500; letter-spacing:.02em; transition:all .35s ease; display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.submit-btn:hover{ background:var(--gold); color:var(--ink); transform:translateY(-2px); }
+.form-note{ font-size:.78rem; color:#8a8f82; margin-top:14px; text-align:center; }
+.success-msg{
+  display:none; text-align:center; padding:40px 10px;
+}
+.success-msg.show{ display:block; animation:fadeUp .6s ease; }
+.success-msg .check{
+  width:60px; height:60px; border-radius:50%; background:var(--gold); margin:0 auto 18px;
+  display:flex; align-items:center; justify-content:center;
+}
+
+footer{
+  background:#152019; color:rgba(247,243,232,.55); padding:50px 5vw; font-size:.85rem;
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px;
+}
+footer .fmark{ display:flex; align-items:center; gap:10px; color:var(--sand-light); font-family:'Fraunces',serif; font-size:1.1rem; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
+}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <a href="#" class="logo" onclick="goTo('home');return false;">
+    <span class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none"><path d="M4 20L20 6l16 14M8 17v16h9V23h6v10h9V17" stroke="#c9a15a" stroke-width="2" stroke-linejoin="round"/></svg>
+    </span>
+    Amber Grove <span style="color:var(--gold);font-style:italic;font-weight:400;">Realty</span>
+  </a>
+  <nav class="tabs" id="navTabs">
+    <button data-page="home" class="active">Home</button>
+    <button data-page="about">About Us</button>
+    <button data-page="properties">Properties</button>
+    <button data-page="reviews">Reviews</button>
+  </nav>
+  <div class="header-right">
+    <div class="social-row social-header">
+      <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.5 9.9v-7H7.9V12h2.6V9.8c0-2.6 1.5-4 3.9-4 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+      <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.4.45.7.27 1.2.6 1.7 1.1.5.5.85 1 1.1 1.7.25.6.4 1.3.45 2.4.06 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.45 2.4-.27.7-.6 1.2-1.1 1.7-.5.5-1 .85-1.7 1.1-.6.25-1.3.4-2.4.45-1 .06-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.4-.45-.7-.27-1.2-.6-1.7-1.1-.5-.5-.85-1-1.1-1.7-.25-.6-.4-1.3-.45-2.4C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.45-2.4.27-.7.6-1.2 1.1-1.7.5-.5 1-.85 1.7-1.1.6-.25 1.3-.4 2.4-.45C8.9 2 9.3 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zm5.2-8.4a1.2 1.2 0 100-2.4 1.2 1.2 0 000 2.4z"/></svg></a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.76-2C20.9 8.7 22 11 22 14.4V21h-4v-6c0-1.4 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z"/></svg></a>
+    </div>
+    <a href="#" class="nav-cta" onclick="goTo('reviews');return false;">Book a Viewing</a>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button data-page="home" class="active">Home</button>
+  <button data-page="about">About Us</button>
+  <button data-page="properties">Properties</button>
+  <button data-page="reviews">Reviews</button>
+  <div class="social-row social-mobile">
+    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.5 9.9v-7H7.9V12h2.6V9.8c0-2.6 1.5-4 3.9-4 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.4.45.7.27 1.2.6 1.7 1.1.5.5.85 1 1.1 1.7.25.6.4 1.3.45 2.4.06 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.45 2.4-.27.7-.6 1.2-1.1 1.7-.5.5-1 .85-1.7 1.1-.6.25-1.3.4-2.4.45-1 .06-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.4-.45-.7-.27-1.2-.6-1.7-1.1-.5-.5-.85-1-1.1-1.7-.25-.6-.4-1.3-.45-2.4C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.45-2.4.27-.7.6-1.2 1.1-1.7.5-.5 1-.85 1.7-1.1.6-.25 1.3-.4 2.4-.45C8.9 2 9.3 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zm5.2-8.4a1.2 1.2 0 100-2.4 1.2 1.2 0 000 2.4z"/></svg></a>
+    <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.76-2C20.9 8.7 22 11 22 14.4V21h-4v-6c0-1.4 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z"/></svg></a>
+  </div>
+</div>
+
+<!-- ============ PAGE 1: HOME ============ -->
+<section class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-skyline">
+      <svg viewBox="0 0 1200 260" preserveAspectRatio="none">
+        <path d="M0 260 L0 180 L60 180 L60 120 L140 120 L140 200 L220 200 L220 90 L260 90 L260 60 L300 60 L300 90 L340 90 L340 210 L430 210 L430 140 L470 140 L470 100 L520 100 L520 230 L610 230 L610 150 L700 150 L700 70 L740 70 L740 40 L780 40 L780 70 L820 70 L820 190 L900 190 L900 110 L960 110 L960 220 L1050 220 L1050 160 L1120 160 L1120 240 L1200 240"/>
+      </svg>
+    </div>
+    <div class="hero-content">
+      <div class="eyebrow">Amber Grove Realty · Est. 2011</div>
+      <h1>Find the home<br>that finds <em>you</em>.</h1>
+      <p class="lead">We pair patient, local expertise with a portfolio of homes chosen for character, not just square footage. Every listing is walked, vetted, and photographed by us — no stock shots, no surprises.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-gold" onclick="goTo('properties');return false;">View Properties</a>
+        <a href="#" class="btn btn-outline" onclick="goTo('about');return false;">Meet the Team</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">312</div><div class="lbl">Homes Sold</div></div>
+      <div class="stat"><div class="num">14</div><div class="lbl">Years Local</div></div>
+      <div class="stat"><div class="num">4.9</div><div class="lbl">Client Rating</div></div>
+    </div>
+  </div>
+
+  <div class="mosaic-section">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Portfolio</div>
+      <h2>Spaces worth waking up in</h2>
+      <p>A rotating look at homes currently in our care — from quiet countryside retreats to light-filled city apartments.</p>
+    </div>
+    <div class="mosaic reveal">
+      <div class="tile t1"><img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80" alt="Modern house exterior"><div class="tag">Willow Creek Estate</div></div>
+      <div class="tile t2"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80" alt="Living room interior"><div class="tag">Sunlit Living Room</div></div>
+      <div class="tile t3"><img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80" alt="Modern kitchen"><div class="tag">Chef's Kitchen</div></div>
+      <div class="tile t4"><img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" alt="House with pool"><div class="tag">Poolside Villa</div></div>
+      <div class="tile t5"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80" alt="Cozy bedroom"><div class="tag">Garden Bedroom</div></div>
+    </div>
+  </div>
+
+  <div class="why-section">
+    <div class="section-head reveal">
+      <div class="eyebrow">Why Amber Grove</div>
+      <h2>What working with us actually looks like</h2>
+      <p>Not sales talk — this is the day-to-day difference our clients mention most.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 22V12h6v10M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z"/></svg></div>
+        <h3>Local, Block-by-Block</h3>
+        <p>Our agents live in the neighborhoods they sell — real knowledge, not a database printout.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3M12 22a10 10 0 100-20 10 10 0 000 20z"/></svg></div>
+        <h3>Fast, Honest Replies</h3>
+        <p>Most questions get answered same-day. No chasing your agent for updates.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+        <h3>Transparent Fees</h3>
+        <p>Every cost explained in plain language before you ever sign anything.</p>
+      </div>
+      <div class="why-card reveal">
+        <div class="ic-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></div>
+        <h3>Zero-Pressure Tours</h3>
+        <p>We show homes on your schedule and never rush a decision this big.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="marquee-wrap">
+    <div class="marquee" id="marqueeTrack"></div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2: ABOUT US ============ -->
+<section class="page" id="page-about">
+  <div class="about-hero">
+    <div class="section-head reveal">
+      <div class="eyebrow">About Amber Grove</div>
+      <h2>Real estate, the way a neighbor would do it</h2>
+      <p>Founded in 2011, we grew from a two-person kitchen-table operation into the region's most trusted boutique agency — without losing the part where we still walk every property ourselves.</p>
+    </div>
+  </div>
+
+  <div class="about-grid">
+    <img class="reveal" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=900&q=80" alt="Real estate agent showing home">
+    <div class="about-copy reveal">
+      <h2>Fourteen years, one street at a time</h2>
+      <p>We started Amber Grove because buying or selling a home shouldn't feel like a transaction between strangers. Our agents live in the neighborhoods they sell — they know which block gets afternoon light and which school run beats traffic.</p>
+      <p>Today our team handles everything from first-time buyer paperwork to full estate sales, but the promise is the same one we made on day one: straight answers, fair pricing, and a home that actually fits your life.</p>
+    </div>
+  </div>
+
+  <div class="values">
+    <div class="value-card reveal">
+      <div class="num">01</div>
+      <h3>Local First</h3>
+      <p>Every agent lives within the areas we list — real block-by-block knowledge, not a database printout.</p>
+    </div>
+    <div class="value-card reveal">
+      <div class="num">02</div>
+      <h3>No Pressure Tours</h3>
+      <p>We show homes on your schedule and never rush a decision worth this much.</p>
+    </div>
+    <div class="value-card reveal">
+      <div class="num">03</div>
+      <h3>Transparent Fees</h3>
+      <p>Commission and closing costs explained in plain language before you ever sign.</p>
+    </div>
+  </div>
+
+  <div class="team-strip">
+    <div class="section-head reveal">
+      <div class="eyebrow">The People</div>
+      <h2>Your agents, in person</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&q=80" alt="Agent portrait"></div>
+        <h4>Maren Whitfield</h4><span>Founder &amp; Principal Broker</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=500&q=80" alt="Agent portrait"></div>
+        <h4>Daniel Osei</h4><span>Senior Buyer's Agent</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1607990283143-e81e7a2c9349?w=500&q=80" alt="Agent portrait"></div>
+        <h4>Priya Nandan</h4><span>Listings &amp; Marketing</span>
+      </div>
+      <div class="team-card reveal">
+        <div class="ph"><img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500&q=80" alt="Agent portrait"></div>
+        <h4>Tomas Rivera</h4><span>Relocation Specialist</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 3: PROPERTIES ============ -->
+<section class="page" id="page-properties">
+  <div class="props-hero">
+    <div class="section-head reveal">
+      <div class="eyebrow">Our Homes</div>
+      <h2>Current listings</h2>
+      <p>Every home below is active and shown by appointment. Tap a card to note the details, then reach out through the contact form.</p>
+    </div>
+    <div class="filter-row reveal">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="house">Houses</button>
+      <button data-filter="apartment">Apartments</button>
+      <button data-filter="villa">Villas</button>
+    </div>
+  </div>
+
+  <div class="prop-grid" id="propGrid"></div>
+</section>
+
+<!-- ============ PAGE 4: REVIEWS + CONTACT ============ -->
+<section class="page" id="page-reviews">
+  <div class="rev-hero">
+    <div class="section-head reveal">
+      <div class="eyebrow">Client Stories</div>
+      <h2>What it's like working with us</h2>
+      <p>A few notes from buyers and sellers we've worked with recently.</p>
+    </div>
+  </div>
+
+  <div class="rev-track-wrap">
+    <div class="rev-track" id="revTrack"></div>
+  </div>
+
+  <div class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="eyebrow" style="color:var(--gold);">Let's Talk</div>
+        <h2 style="margin-top:14px;">Tell us what you're looking for</h2>
+        <p>Fill out the form and it goes straight to our principal broker — most people hear back within one business day.</p>
+        <div class="contact-detail">
+          <div><span class="ic">☎</span> (555) 214-7783</div>
+          <div><span class="ic">✉</span> hello@ambergroverealty.com</div>
+          <div><span class="ic">⚑</span> 14 Meridian Ave, Oakhaven</div>
+        </div>
+      </div>
+
+      <form class="contact-form reveal" id="contactForm">
+        <div id="formFields">
+          <div class="form-row">
+            <div class="field">
+              <input type="text" required placeholder=" " id="cf-name">
+              <label for="cf-name">Full name</label>
+            </div>
+            <div class="field">
+              <input type="tel" required placeholder=" " id="cf-phone">
+              <label for="cf-phone">Phone number</label>
+            </div>
+          </div>
+          <div class="field">
+            <input type="email" required placeholder=" " id="cf-email">
+            <label for="cf-email">Email address</label>
+          </div>
+          <div class="field">
+            <select id="cf-interest" style="color:var(--ink);">
+              <option value="">I'm interested in…</option>
+              <option>Buying a home</option>
+              <option>Selling a home</option>
+              <option>Renting</option>
+              <option>Just browsing</option>
+            </select>
+          </div>
+          <div class="field">
+            <textarea required placeholder=" " id="cf-message"></textarea>
+            <label for="cf-message">Tell us about what you need</label>
+          </div>
+          <button type="submit" class="submit-btn">Send to our team →</button>
+          <p class="form-note">We reply within one business day. No spam, ever.</p>
+        </div>
+        <div class="success-msg" id="successMsg">
+          <div class="check">✓</div>
+          <h3 style="font-family:'Fraunces',serif;color:var(--forest);">Message sent</h3>
+          <p style="color:#5a5f57;margin-top:8px;">Thanks — a member of the Amber Grove team will reach out shortly.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fmark">Amber Grove <span style="color:var(--gold);font-style:italic;">Realty</span></div>
+  <div class="social-row">
+    <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.5 9.9v-7H7.9V12h2.6V9.8c0-2.6 1.5-4 3.9-4 1.1 0 2.3.2 2.3.2v2.5h-1.3c-1.3 0-1.7.8-1.7 1.6V12h2.9l-.5 2.9h-2.4v7A10 10 0 0022 12z"/></svg></a>
+    <a href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.4.45.7.27 1.2.6 1.7 1.1.5.5.85 1 1.1 1.7.25.6.4 1.3.45 2.4.06 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.45 2.4-.27.7-.6 1.2-1.1 1.7-.5.5-1 .85-1.7 1.1-.6.25-1.3.4-2.4.45-1 .06-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.4-.45-.7-.27-1.2-.6-1.7-1.1-.5-.5-.85-1-1.1-1.7-.25-.6-.4-1.3-.45-2.4C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.45-2.4.27-.7.6-1.2 1.1-1.7.5-.5 1-.85 1.7-1.1.6-.25 1.3-.4 2.4-.45C8.9 2 9.3 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zm5.2-8.4a1.2 1.2 0 100-2.4 1.2 1.2 0 000 2.4z"/></svg></a>
+    <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2 3.76-2C20.9 8.7 22 11 22 14.4V21h-4v-6c0-1.4 0-3.3-2-3.3s-2.3 1.6-2.3 3.2V21H9z"/></svg></a>
+  </div>
+  <div>© 2026 Amber Grove Realty. All rights reserved.</div>
+</footer>
+
+<script>
+/* ---------- page routing ---------- */
+const pages = ['home','about','properties','reviews'];
+function goTo(name){
+  pages.forEach(p=>{
+    document.getElementById('page-'+p).classList.toggle('active', p===name);
+  });
+  document.querySelectorAll('#navTabs button, .mobile-menu button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.page===name);
+  });
+  document.getElementById('mobileMenu').classList.remove('open');
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+  requestAnimationFrame(runReveal);
+}
+document.querySelectorAll('#navTabs button, .mobile-menu button').forEach(b=>{
+  b.addEventListener('click', ()=>goTo(b.dataset.page));
+});
+
+/* header scroll state */
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', ()=>{
+  header.classList.toggle('scrolled', window.scrollY>30);
+});
+
+/* hamburger */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', ()=> mobileMenu.classList.toggle('open'));
+
+/* reveal-on-scroll */
+function runReveal(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight*0.88) el.classList.add('in');
+  });
+}
+window.addEventListener('scroll', runReveal);
+runReveal();
+
+/* marquee content */
+const words = ["Trusted since 2011","312+ Homes Sold","Local Experts","Zero-Pressure Tours","4.9★ Average Rating","Transparent Fees"];
+const marquee = document.getElementById('marqueeTrack');
+let mHTML='';
+for(let i=0;i<2;i++){
+  words.forEach(w=>{ mHTML += `<span><b>✦</b> ${w}</span>`; });
+}
+marquee.innerHTML = mHTML;
+
+/* ---------- properties data ---------- */
+const properties = [
+  {images:["https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=700&q=80","https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80","https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=700&q=80","https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=700&q=80"], type:"house", tag:"For Sale", price:"$620,000", title:"Willow Creek Estate", loc:"Oakhaven, Hillside District", beds:4, baths:3, sqft:"2,850"},
+  {images:["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=700&q=80","https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=700&q=80","https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=700&q=80"], type:"apartment", tag:"For Rent", price:"$2,150/mo", title:"Meridian Loft 4B", loc:"Downtown Oakhaven", beds:2, baths:2, sqft:"1,140"},
+  {images:["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&q=80","https://images.unsplash.com/photo-1613977257363-707ba9348227?w=700&q=80","https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=700&q=80","https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=700&q=80"], type:"villa", tag:"For Sale", price:"$1,240,000", title:"Poolside Villa Serena", loc:"Cedar Point", beds:5, baths:4, sqft:"4,020"},
+  {images:["https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=700&q=80","https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?w=700&q=80","https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=700&q=80"], type:"house", tag:"For Sale", price:"$489,000", title:"The Birchwood Cottage", loc:"Fernwood Lane", beds:3, baths:2, sqft:"1,980"},
+  {images:["https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=700&q=80","https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=700&q=80","https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=700&q=80"], type:"apartment", tag:"For Rent", price:"$1,850/mo", title:"Harbor View Suite 12", loc:"Waterfront Row", beds:1, baths:1, sqft:"820"},
+  {images:["https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=700&q=80","https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=700&q=80","https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=700&q=80","https://images.unsplash.com/photo-1591474200742-8e512e6f98f8?w=700&q=80"], type:"villa", tag:"New Listing", price:"$980,000", title:"Grove House Villa", loc:"Amber Grove Hills", beds:4, baths:3, sqft:"3,340"},
+  {images:["https://images.unsplash.com/photo-1613977257363-707ba9348227?w=700&q=80","https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=700&q=80","https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=700&q=80"], type:"house", tag:"For Sale", price:"$715,500", title:"Sycamore Family Home", loc:"Maple District", beds:4, baths:3, sqft:"2,610"},
+  {images:["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=700&q=80","https://images.unsplash.com/photo-1554995207-c18c203602cb?w=700&q=80","https://images.unsplash.com/photo-1598928506311-c55ded91a20c?w=700&q=80"], type:"apartment", tag:"For Rent", price:"$1,600/mo", title:"Elmcroft Studio 3", loc:"University Quarter", beds:1, baths:1, sqft:"640"},
+  {images:["https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&q=80","https://images.unsplash.com/photo-1600210492493-0946911123ea?w=700&q=80","https://images.unsplash.com/photo-1600566752734-2a0cd53f31a0?w=700&q=80","https://images.unsplash.com/photo-1615873968403-89e068629265?w=700&q=80"], type:"villa", tag:"For Sale", price:"$1,495,000", title:"The Ridgeline Estate", loc:"Northgate Hills", beds:6, baths:5, sqft:"5,120"},
+];
+
+const propGrid = document.getElementById('propGrid');
+function renderProps(filter){
+  const list = properties.filter(p=> filter==='all' || p.type===filter);
+  propGrid.innerHTML = list.map((p,i)=>`
+      <div class="prop-card reveal">
+        <div class="prop-media" data-idx="${i}" data-front="0">
+          <div class="flip-inner">
+            <div class="flip-face front"><img src="${p.images[0]}" alt="${p.title} photo 1"></div>
+            <div class="flip-face back"><img src="${p.images[1] || p.images[0]}" alt="${p.title} photo 2"></div>
+          </div>
+          <div class="prop-badge">${p.tag}</div>
+          <div class="prop-price">${p.price}</div>
+          ${p.images.length>1 ? `<div class="gallery-hint">Tap for more photos</div>
+          <div class="gallery-dots">${p.images.map((_,d)=>`<span class="${d===0?'active':''}"></span>`).join('')}</div>` : ''}
+        </div>
+        <div class="prop-body">
+          <h3>${p.title}</h3>
+          <div class="loc">${p.loc}</div>
+          <div class="prop-meta">
+            <span>🛏 ${p.beds} bd</span>
+            <span>🛁 ${p.baths} ba</span>
+            <span>▢ ${p.sqft} sqft</span>
+          </div>
+        </div>
+      </div>`).join('');
+
+  // wire flip-click galleries
+  propGrid.querySelectorAll('.prop-media').forEach(media=>{
+    const idx = +media.dataset.idx;
+    const imgs = list[idx].images;
+    if(imgs.length<2) return;
+    let cur = 0; // index currently shown on front
+    let flipped = false;
+    const inner = media.querySelector('.flip-inner');
+    const front = media.querySelector('.flip-face.front img');
+    const back = media.querySelector('.flip-face.back img');
+    const dots = media.querySelectorAll('.gallery-dots span');
+    media.addEventListener('click', ()=>{
+      const next = (cur+1) % imgs.length;
+      if(!flipped){
+        back.src = imgs[next];
+        inner.classList.add('flipped');
+      } else {
+        front.src = imgs[next];
+        inner.classList.remove('flipped');
+      }
+      flipped = !flipped;
+      cur = next;
+      dots.forEach((d,i2)=> d.classList.toggle('active', i2===cur));
+    });
+  });
+
+  runReveal();
+}
+renderProps('all');
+document.querySelectorAll('.filter-row button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.filter-row button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderProps(btn.dataset.filter);
+  });
+});
+
+/* ---------- reviews data ---------- */
+const reviews = [
+  {name:"Elena Marsh", role:"Bought a home in Oakhaven", av:"https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80", text:"Maren found us a house we hadn't even considered and it turned out perfect. No pressure, ever — just honest advice."},
+  {name:"Jordan Pike", role:"Sold in Cedar Point", av:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80", text:"Sold above asking in 11 days. The marketing photos alone were worth the commission."},
+  {name:"Aisha Farrow", role:"First-time buyer", av:"https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&q=80", text:"Daniel walked me through every fee line by line. I never once felt out of my depth."},
+  {name:"Marcus Chen", role:"Relocated from out of state", av:"https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&q=80", text:"Tomas handled the whole search remotely and it still felt personal. Genuinely grateful."},
+  {name:"Sofia Reyes", role:"Rented a downtown loft", av:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&q=80", text:"Fast, clear, zero games. Wish every rental process worked this way."},
+];
+const revTrack = document.getElementById('revTrack');
+const revCard = r=>`
+  <div class="rev-card">
+    <div class="stars">★★★★★</div>
+    <p>"${r.text}"</p>
+    <div class="rev-who">
+      <div class="av"><img src="${r.av}" alt="${r.name}"></div>
+      <div><b>${r.name}</b><span>${r.role}</span></div>
+    </div>
+  </div>`;
+// duplicate the list so the track can loop seamlessly at -50%
+revTrack.innerHTML = reviews.map(revCard).join('') + reviews.map(revCard).join('');
+
+/* ---------- contact form ---------- */
+document.getElementById('contactForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementById('formFields').style.display='none';
+  document.getElementById('successMsg').classList.add('show');
+});
+</script>
+</body>
+</html>
